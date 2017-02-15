@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+<h1>Image</h1>
+<p>
+  <strong>Name:</strong>
+  <%= @image.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @image.description %>
+</p>
+
+<p>
+  <strong>Ami:</strong>
+  <%= @image.ami %>
+</p>
+
+<p>
+  <strong>Os:</strong>
+  <%= @image.os %>
+</p>
+
+<p>
+  <strong>Login:</strong>
+  <%= @image.login %>
+</p>
+<% @instances = Instance.find_by_ami(@image.ami) %>
+<%= render template: "instances/index" %>
+
+<%= link_to 'Edit', edit_image_path(@image) %> |
+<%= link_to 'Back', images_path %>

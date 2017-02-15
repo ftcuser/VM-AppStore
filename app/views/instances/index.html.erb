@@ -1,0 +1,32 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Instances</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Image</th>
+      <th>IP</th>
+      <th>State</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @instances.each do |instance| %>
+      <% image = Image.find_by_ami(instance.image_id) %>
+      <tr>
+        <td><%= link_to instance.instance_id, instance_path(instance.instance_id) %></td>
+        <td><%= link_to image.name, image %></td>
+        <td><%= instance.public_ip_address %></td>
+        <td><%= instance.state.name %></td>
+        <td><%= link_to 'Start', start_instance_path(instance.instance_id), method: :put %></td>
+        <td><%= link_to 'Stop', stop_instance_path(instance.instance_id), method: :put %></td>
+        <td><%= link_to 'Destroy', '/instances/'+instance.instance_id, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>

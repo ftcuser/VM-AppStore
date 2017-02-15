@@ -1,0 +1,37 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>ID:</strong>
+  <%= @instance.instance_id %>
+</p>
+
+<p>
+  <strong>Image:</strong>
+  <%= @image.name %>
+</p>
+
+<p>
+  <strong>IP:</strong>
+  <%= @instance.public_ip_address %>
+</p>
+
+<p>
+  <strong>State:</strong>
+  <%= @instance.state.name %>
+</p>
+
+<p>
+  <strong>Key:</strong>
+  <%= @instance.key_name %>
+</p>
+
+
+<%= link_to 'Back', instances_path %>
+
+<%= link_to 'Start', start_instance_path(@instance.instance_id), method: :put %>
+<%= link_to 'Stop', stop_instance_path(@instance.instance_id), method: :put %>
+<%= link_to 'Destroy', '/instances/'+@instance.instance_id, method: :delete, data: { confirm: 'Are you sure?' } %>
+<p> To log in, use your key, and the following command: </p>
+<code class="code">
+  ssh -i $your_key <%= @image.login %>@<%= @instance.public_ip_address %>
+</code>

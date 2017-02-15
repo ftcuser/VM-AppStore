@@ -1,0 +1,36 @@
+#!/bin/bash
+profile=citizant
+echo "creating key pair"
+securityKeyName="testCluster"   # CHANGE TO YOUR KEY NAME
+aws --profile $profile ec2 import-key-pair --key-name $securityKeyName --public-key-material "`cat ~/.ssh/id_rsa.pub`"
+
+echo "creating a security group"
+security=$( \
+	aws --profile $profile ec2 create-security-group \
+		--group-name DemoSecurity \
+		--description "wide open for testing an ephemeral cluster"
+)
+
+securityID=$(echo "$security" | grep GroupId | cut -d '"' -f4)
+echo "securityID: $securityID"
+
+aws --profile $profile ec2 authorize-security-group-ingress --group-id $securityID --protocol tcp --port 22 --cidr 0.0.0.0/0
+aws --profile $profile ec2 authorize-security-group-ingress --group-id $securityID --protocol tcp --port 80 --cidr 0.0.0.0/0
+aws --profile $profile ec2 authorize-security-group-ingress --group-id $securityID --protocol tcp --port 443 --cidr 0.0.0.0/0
+
+cat > delete-setup << EOF
+#!/bin/bash
+
+# deleting security group
+aws --profile $profile ec2 delete-security-group --group-id $securityID
+
+#deleting key pair
+aws --profile $profile ec2 delete-key-pair --key-name $securityKeyName
+
+# cleaning up completed delete script
+rm -f delete-cluster
+
+
+EOF
+
+chmod +x delete-setup
