@@ -4,8 +4,7 @@ require 'openssl'
 
 
 class Instance
-  @@credentials = Aws::SharedCredentials.new(profile_name:'citizant')
-  @@client = Aws::EC2::Client.new(credentials: @@credentials,region: 'us-east-1')
+  @@client = Aws::EC2::Client.new(region: 'us-east-1')
 
   def self.find_by_id(id)
     #get data on instances
